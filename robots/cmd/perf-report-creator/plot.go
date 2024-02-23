@@ -238,9 +238,101 @@ func figFromData(data PlotData) *grob.Fig {
 				Text: data.Title,
 			},
 			Xaxis: &grob.LayoutXaxis{Type: grob.LayoutXaxisTypeDate},
+			// The gray dotted line in the graph is March 1, 2023, denoting release of v0.60
+			// The blue dotted line in the graph is July 6, 2023, denoting release of v1.0.0
+			// The green dotted line in the graph is September 6, 2023, denoting change in k8s provider from v1.25 to v1.27
+			// The red dotted line in the graph is December 25, 2023, denoting release of v1.1.0
+
+			Shapes: []LineShape{
+				{
+					Type:     "line",
+					X0:       "2023-03-01",
+					X1:       "2023-03-01",
+					Y0:       0,
+					Y1:       1,
+					Yref:     "paper",
+					Editable: true,
+					Line: grob.ScatterLine{
+						Color: "grey",
+						Width: 2,
+						Dash:  "dot",
+					},
+					Label: map[string]string{
+						"text":    "v0.60.0",
+						"xanchor": "right",
+					},
+				},
+				{
+					Type:     "line",
+					X0:       "2023-07-06",
+					X1:       "2023-07-06",
+					Y0:       0,
+					Y1:       1,
+					Yref:     "paper",
+					Editable: true,
+					Line: grob.ScatterLine{
+						Color: "blue",
+						Width: 2,
+						Dash:  "dot",
+					},
+					Label: map[string]string{
+						"text":    "v1.0.0",
+						"xanchor": "right",
+					},
+				},
+				{
+					Type:     "line",
+					X0:       "2023-09-06",
+					X1:       "2023-09-06",
+					Y0:       0,
+					Y1:       1,
+					Yref:     "paper",
+					Editable: true,
+					Line: grob.ScatterLine{
+						Color: "green",
+						Width: 2,
+						Dash:  "dot",
+					},
+					Label: map[string]string{
+						"text":    "k8s-1.27",
+						"xanchor": "right",
+					},
+				},
+				{
+					Type:     "line",
+					X0:       "2023-12-25",
+					X1:       "2023-12-25",
+					Y0:       0,
+					Y1:       1,
+					Yref:     "paper",
+					Editable: true,
+					Line: grob.ScatterLine{
+						Color: "red",
+						Width: 2,
+						Dash:  "dot",
+					},
+					Label: map[string]string{
+						"text":    "v1.1.0",
+						"xanchor": "right",
+					},
+				},
+			},
 		},
 	}
+
 	return fig
+}
+
+type LineShape struct {
+	Type     string            `json:"type,omitempty"`
+	X0       string            `json:"x0,omitempty"`
+	X1       string            `json:"x1,omitempty"`
+	Y0       float64           `json:"y0"`
+	Y1       float64           `json:"y1,omitempty"`
+	Yref     string            `json:"yref,omitempty"`
+	Editable bool              `json:"editable"`
+	Line     grob.ScatterLine  `json:"line,omitempty"`
+	Label    map[string]string `json:"label"`
 }
 
 func transformForStaticGraph(x []string, y []float64) (plotter.XYs, error) {
